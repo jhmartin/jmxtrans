@@ -23,8 +23,8 @@ import org.slf4j.LoggerFactory;
  * <p/>
  * Settings:
  * <ul>
- * <li>"{@code host}": Sensu client host. Optional, default value: localhost
- * {@value #DEFAULT_LIBRATO_API_URL}.</li>
+ * <li>"{@code host}": Sensu client host. Optional, default value: {@value #DEFAULT_SENSU_HOST}</li>
+ * <li>"{@code handler}": Sensu handler host. Optional, default value: {@value #DEFAULT_SENSU_HANDLER}</li>
  * </ul>
  *
  * @author <a href="mailto:jhmartin@toger.us">Jason Martin</a>
@@ -32,7 +32,9 @@ import org.slf4j.LoggerFactory;
 public class SensuWriter extends BaseOutputWriter {
 
     public final static String SETTING_HOST = "host";
+    public final static String SETTING_HANDLER = "handler";
     public final static String DEFAULT_SENSU_HOST = "localhost";
+    public final static String DEFAULT_SENSU_HANDLER = "graphite";
 
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -41,6 +43,7 @@ public class SensuWriter extends BaseOutputWriter {
      * Sensu HTTP API URL
      */
     private String sensuhost;
+    private String sensuhandler;
 
     @Override
     public void start() {
@@ -48,8 +51,9 @@ public class SensuWriter extends BaseOutputWriter {
     }
 
     public void validateSetup(Query query) throws ValidationException {
-            sensuhost = new String(getStringSetting(SETTING_HOST,DEFAULT_SENSU_HOST ));
-            logger.info("Start Sensu writer connected to '{}'", sensuhost);
+            sensuhost = new String(getStringSetting(SETTING_HOST,DEFAULT_SENSU_HOST));
+            sensuhandler = new String(getStringSetting(SETTING_HANDLER,DEFAULT_SENSU_HANDLER));
+            logger.info("Start Sensu writer connected to '{}' with handler {}", sensuhost, sensuhandler);
     }
 
     public void doWrite(Query query) throws Exception {
@@ -63,7 +67,7 @@ public class SensuWriter extends BaseOutputWriter {
         g.writeStartObject();
         g.writeStringField("name", "jmxtrans");
         g.writeStringField("type", "metric");
-        g.writeStringField("handler", "graphite");
+        g.writeStringField("handler", sensuhandler);
 
 	String jsonoutput = "";
         List<String> typeNames = getTypeNames();

@@ -5,20 +5,12 @@ import com.googlecode.jmxtrans.model.Result;
 import com.googlecode.jmxtrans.util.BaseOutputWriter;
 import com.googlecode.jmxtrans.util.JmxUtils;
 import com.googlecode.jmxtrans.util.ValidationException;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.nio.charset.Charset;
 import java.net.*;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.output.NullOutputStream;
-import org.codehaus.jackson.Base64Variants;
 import org.codehaus.jackson.JsonEncoding;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
@@ -73,7 +65,6 @@ public class SensuWriter extends BaseOutputWriter {
         g.writeStringField("type", "metric");
         g.writeStringField("handler", "graphite");
 
-        String source = getSource(query);
 	String jsonoutput = "";
         List<String> typeNames = getTypeNames();
         for (Result result : query.getResults()) {
@@ -119,11 +110,11 @@ public class SensuWriter extends BaseOutputWriter {
         }
     }
 
-    private String getStringSetting(String setting) throws ValidationException {
-        String s = super.getStringSetting(setting, null);
-        if (s == null) {
-            throw new ValidationException("Setting '" + setting + "' cannot be null", null);
-        }
-        return s;
-    }
+//    private String getStringSetting(String setting) throws ValidationException {
+ //       String s = super.getStringSetting(setting, null);
+  //      if (s == null) {
+   //         throw new ValidationException("Setting '" + setting + "' cannot be null", null);
+    //    }
+     //   return s;
+    //}
 }

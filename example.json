@@ -15,7 +15,7 @@
                         {
                             "@class": "com.googlecode.jmxtrans.model.output.SensuWriter", 
                             "settings": {
-					"host" : "simon.toger.us"
+					"host" : "localhost"
 				}
                         }
                     ]
